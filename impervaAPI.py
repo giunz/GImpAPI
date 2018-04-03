@@ -35,17 +35,17 @@ def login():
   logging.error('An error occured. Status code is '+r.status_code)
  return c
 
-def logout(b):
+def logout(biscuit):
  logging.info('Logging out')
- r = requests.delete(host+'/SecureSphere/api/v1/auth/session', headers=headers, cookies=b,verify=False)
+ r = requests.delete(host+'/SecureSphere/api/v1/auth/session', headers=headers, cookies=biscuit,verify=False)
  if (r.status_code == 200):
   logging.info('Logged out successfully.')
  else:
   logging.error('An error occured. Status code is '+r.status_code)
 
-def getAllSites(b):
+def getAllSites(biscuit):
  logging.info('Getting Sites.')
- r = requests.get(host+'/SecureSphere/api/v1/conf/sites', headers=headers, cookies=b,verify=False)
+ r = requests.get(host+'/SecureSphere/api/v1/conf/sites', headers=headers, cookies=biscuit,verify=False)
  if (r.status_code == 200):
   sites = r.json()
   logging.info('Retrieved the sites successfully.')
@@ -54,9 +54,9 @@ def getAllSites(b):
  else:
   logging.error('An error occured. Status code is '+r.status_code)
 
-def getAllServerGroups(b,site):
+def getAllServerGroups(biscuit,site):
  logging.info('Getting Server Groups.')
- r = requests.get(host+'/SecureSphere/api/v1/conf/serverGroups/'+site, headers=headers, cookies=b,verify=False)
+ r = requests.get(host+'/SecureSphere/api/v1/conf/serverGroups/'+site, headers=headers, cookies=biscuit,verify=False)
  if (r.status_code == 200):
   server_groups = r.json()
   logging.info('Retrieved the Server Groups successfully.')
@@ -65,9 +65,9 @@ def getAllServerGroups(b,site):
  else:
   logging.error('An error occured. Status code is '+r.status_code)
 
-def getAllWebServices(b,site,server_group):
+def getAllWebServices(biscuit,site,server_group):
  logging.info('Getting Web Services.')
- r = requests.get(host+'/SecureSphere/api/v1/conf/webServices/'+site+'/'+server_group, headers=headers, cookies=b,verify=False)
+ r = requests.get(host+'/SecureSphere/api/v1/conf/webServices/'+site+'/'+server_group, headers=headers, cookies=biscuit,verify=False)
  if (r.status_code == 200):
   ws = r.json()
   logging.info('Retrieved the Web Services successfully.')
@@ -78,13 +78,13 @@ def getAllWebServices(b,site,server_group):
 
 cookies=login()
 logging.debug('JSESSIONID is '+cookies)
-c = {'JSESSIONID':cookies}
-sites = getAllSites(c)
+cookie = {'JSESSIONID':cookies}
+sites = getAllSites(cookie)
 logging.debug('First site\'s name is.... '+sites['sites'][0])
 site=sites['sites'][0]
-server_groups = getAllServerGroups(c,site)
+server_groups = getAllServerGroups(cookie,site)
 logging.debug('First Server Group\'s name for site '+site+' is.... '+server_groups['server-groups'][0])
 sg=server_groups['server-groups'][0]
-ws=getAllWebServices(c,site,sg)
+ws=getAllWebServices(cookie,site,sg)
 logging.debug('First service\'s name for site '+site+' and Server Group '+sg+' is '+ws['web-services'][0])
-logout(c)
+logout(cookie)
