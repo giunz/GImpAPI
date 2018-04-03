@@ -20,7 +20,7 @@ try:
   password= (config['DEFAULT']['password'])
 except KeyError:
   logging.info("No configurations file found.")
- 
+
 logging.debug("Using Hostname "+host)
 logging.debug("Using Username "+user)
 logging.debug("Using Password "+password)
@@ -34,7 +34,7 @@ def login():
  else:
   logging.error('An error occured. Status code is '+r.status_code)
  return c
- 
+
 def logout(b):
  logging.info('Logging out')
  r = requests.delete(host+'/SecureSphere/api/v1/auth/session', headers=headers, cookies=b,verify=False)
@@ -62,7 +62,7 @@ def getAllServerGroups(b,site):
   return sg
  else:
   logging.error('An error occured. Status code is '+r.status_code)
- 
+
 def getAllWebServices(b,site,sg):
  logging.info('Getting Web Services.')
  r = requests.get(host+'/SecureSphere/api/v1/conf/serverGroups/'+site+'/'+sg, headers=headers, cookies=b,verify=False)
@@ -72,15 +72,15 @@ def getAllWebServices(b,site,sg):
   return ws
  else:
   logging.error('An error occured. Status code is '+r.status_code)
-  
+
 cookies=login()
 logging.debug('JSESSIONID is '+cookies)
 c = {'JSESSIONID':cookies}
 sites = getAllSites(c)
 logging.info('First site\'s name is.... '+sites['sites'][0])
 site=sites['sites'][0]
-sg=server_groups = getAllServerGroups(c,site)
-logging.info('First Server Group\'s name for site '+site+' is.... '+sg)
+server-groups = getAllServerGroups(c,site)
+logging.info('First Server Group\'s name for site '+site+' is.... '+server-groups[0][0])
 #server_group=sg
 #ws=getAllWebServices(c,site,sg)
 #logging.info('First service\'s name for site '+site+'and Server Group '+sg+' is '+ws['web-services'][0] )
