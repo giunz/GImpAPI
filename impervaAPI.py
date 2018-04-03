@@ -63,9 +63,9 @@ def getAllServerGroups(b,site):
  else:
   logging.error('An error occured. Status code is '+r.status_code)
 
-def getAllWebServices(b,site,sg):
+def getAllWebServices(b,site,server_group):
  logging.info('Getting Web Services.')
- r = requests.get(host+'/SecureSphere/api/v1/conf/serverGroups/'+site+'/'+sg, headers=headers, cookies=b,verify=False)
+ r = requests.get(host+'/SecureSphere/api/v1/conf/serverGroups/'+site+'/'+server_group, headers=headers, cookies=b,verify=False)
  if (r.status_code == 200):
   ws = r.json()
   logging.info('Retrieved the Server Groups successfully.\n' +str(ws))
@@ -79,9 +79,11 @@ c = {'JSESSIONID':cookies}
 sites = getAllSites(c)
 logging.info('First site\'s name is.... '+sites['sites'][0])
 site=sites['sites'][0]
-server-groups = getAllServerGroups(c,site)
-logging.info('First Server Group\'s name for site '+site+' is.... '+server-groups[0][0])
-#server_group=sg
-#ws=getAllWebServices(c,site,sg)
-#logging.info('First service\'s name for site '+site+'and Server Group '+sg+' is '+ws['web-services'][0] )
+server_groups = getAllServerGroups(c,site)
+logging.debug(str(server_groups))# DEBUG:
+logging.info('First Server Group\'s name for site '+site+' is.... '+server_groups['server-groups'][0])
+sg=server_groups['server-groups'][0]
+ws=getAllWebServices(c,site,sg)
+logging.debug(str(ws))
+logging.info('First service\'s name for site '+site+' and Server Group '+sg+' is '+ws['name'])
 logout(c)
