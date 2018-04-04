@@ -76,6 +76,17 @@ def getAllWebServices(biscuit,site,server_group):
  else:
   logging.error('An error occured. Status code is '+r.status_code)
 
+def getAllWebApplications(biscuit,site,server_group,web_service):
+ logging.info('Getting Web Applications.')
+ r = requests.get(host+'/SecureSphere/api/v1/conf/webApplications/'+site+'/'+server_group+'/'+web_service, headers=headers, cookies=biscuit,verify=False)
+ if (r.status_code == 200):
+  wapps = r.json()
+  logging.info('Retrieved the Web Applications successfully.')
+  logging.debug(str(wapps))
+  return wapps
+ else:
+  logging.error('An error occured. Status code is '+r.status_code)
+
 cookies=login()
 logging.debug('JSESSIONID is '+cookies)
 cookie = {'JSESSIONID':cookies}
@@ -87,4 +98,7 @@ logging.debug('First Server Group\'s name for site '+site+' is.... '+server_grou
 sg=server_groups['server-groups'][0]
 ws=getAllWebServices(cookie,site,sg)
 logging.debug('First service\'s name for site '+site+' and Server Group '+sg+' is '+ws['web-services'][0])
+web_service=ws['web-services'][1]
+web_apps=getAllWebApplications(cookie,site,sg,web_service)
+logging.debug('The web application is '+web_apps['webApplications'][0])
 logout(cookie)
