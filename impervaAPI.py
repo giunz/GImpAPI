@@ -31,7 +31,7 @@ def login():
         logging.info('Successfully logged in.')
     else:
         logging.error('An error occured. Status code is '+r.status_code)
-        return c
+    return c
 
 def logout(biscuit):
     logging.info('Logging out')
@@ -96,7 +96,7 @@ def getProfile(biscuit,site,server_group,web_service,web_application):
     else:
       logging.error('An error occured. Status code is '+r.status_code)
 
-def writeProfileToFile(profile):
+#def writeProfileToFile(profile):
 
 
 cookies=login()
